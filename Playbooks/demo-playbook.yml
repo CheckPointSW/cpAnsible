@@ -1,0 +1,81 @@
+- hosts: 127.0.0.1
+  tasks:
+    - name: login
+      check_point_mgmt:
+        command: login
+        parameters:
+          username: '{{mgmt_user}}'
+          password: '{{mgmt_password}}'
+          management: '{{mgmt_server}}'
+        fingerprint: 5658166D6216B903EC1EA0535B1708CDE206ED14
+      register: login_response
+    - name: add host
+      check_point_mgmt:
+        command: add-host
+        parameters:
+          name: host_demo_1
+          ip-address: 1.1.1.1
+        session-data: '{{login_response}}'
+    - name: add host
+      check_point_mgmt:
+        command: add-host
+        parameters:
+          name: host_demo_2
+          ip-address: 1.1.1.2
+        session-data: '{{login_response}}'
+    - name: add new host new existing group
+      check_point_mgmt:
+        command: set-group
+        parameters:
+          name: group_demo
+          members:
+            add:
+              - host_demo_1
+              - host_demo_2
+        session-data: '{{login_response}}'
+    - name: create new tcp service
+      check_point_mgmt:
+        command: add-service-tcp
+        parameters:
+          name: tcp_1005
+          port: '1005'
+        session-data: '{{login_response}}'
+    - name: create a section called 'script rules'
+      check_point_mgmt:
+        command: add-access-section
+        parameters:
+          layer: Network
+          name: script rules
+          position: 1
+        session-data: '{{ login_response }}'
+    - name: create rule at the top of a section called 'script rules'
+      check_point_mgmt:
+        command: add-access-rule
+        parameters:
+          layer: network
+          name: created by ansible playbook
+          position:
+            top: script rules
+          source:
+            - group_demo
+          destination:
+            - host_demo_1
+            - host_demo_2
+          service:
+            - tcp_1005
+          action: accept
+        session-data: '{{login_response}}'
+    - name: publish
+      check_point_mgmt:
+        command: publish
+        session-data: '{{login_response}}'
+    - name: install policy
+      check_point_mgmt:
+        command: install-policy
+        parameters:
+          policy-package: standard
+        session-data: '{{login_response}}'
+    - name: logout
+      check_point_mgmt:
+        command: logout
+        session-data: '{{login_response}}'

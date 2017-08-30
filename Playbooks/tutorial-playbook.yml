@@ -1,0 +1,41 @@
+---
+- hosts: "localhost"                        # Note #2 in the Description section
+  tasks:
+  - name: "login"                           # You have to login to the management
+                                            # server before running any commands
+    check_point_mgmt:
+      command: login
+      parameters:
+        username: "{{mgmt_user}}"           # Variables set in /etc/ansible/hosts, to avoid needing
+        password: "{{mgmt_password}}"       # to type your login details in every playbook.
+        management: "{{mgmt_server}}"
+      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
+    register: login_response                # Register the output from the login
+                                            # command so we can use it later to run commands.
+  - name: "add host"
+    check_point_mgmt:
+      command: add-host                     # Name of the command
+      parameters:                           #  The parameters for it, in dictionary form
+        name: "host_demo"
+        ip-address: "1.2.3.5"
+      session-data: "{{ login_response }}"  # The session data we received from
+                                            # the login command is used here to run 'add-host'
+  - name: "add group"
+    check_point_mgmt:
+      command: add-group
+      parameters:
+        name: "group_demo"
+        members:
+          - "host_demo"
+      session-data: "{{ login_response }}"
+  - name: "publish"                         # Publishing is important if you want
+                                            # your changes to be saved.
+    check_point_mgmt:                       # This will actually 'discard' when
+                                            # check mode is enabled (ansible-playbook -C)
+                                            # unless you add 'always_run: yes' to the task.
+      sesscommand: publish
+      session-data: "{{login_response}}"
+  - name: logout
+    check_point_mgmt:
+      command: logout
+      session-data: '{{login_response}}'
