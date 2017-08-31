@@ -5,8 +5,7 @@ import sys
 
 from ansible.module_utils.basic import AnsibleModule
 
-sys.path.append("/usr/lib/python2.7/site-packages/ansible/modules/extras/check_point_mgmt/")
-from mgmt_api_lib import APIClient, APIClientArgs
+from cp_mgmt_api_python_sdk.lib import APIClient, APIClientArgs
 
 # arguments for the module:
 fields = {
