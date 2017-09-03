@@ -4,7 +4,7 @@ Installation instructions
 -------------------------
 1. Clone the repository with this command:
 ```git
-git clone --recursive https://github.com/CheckPoint-APIs-Team/ExportImportPolicyPackage
+git clone --recursive https://github.com/CheckPoint-APIs-Team/cpAnsible
 ```
 Or by clicking the Download ZIP button.  
 2. [Install Ansible.](http://docs.ansible.com/ansible/intro_installation.html)  
