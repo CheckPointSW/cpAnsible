@@ -21,9 +21,9 @@ ansible_user=[a username with SSH access to the ansible server, not the Check Po
 ansible_ssh_pass=[password]
 ansible_python_interpreter=[path to the Python installation on the Ansible server]
 # Optional (variables detailing the Check Point's management server access):
-# mgmt_server=[management server's IP address. In case of a multi-domain setup, provide the IP address of the MDS]
-# mgmt_user=[Check Point admin username]
-# mgmt_password=[Check Point admin password]
+mgmt_server=[management server's IP address. In case of a multi-domain setup, provide the IP address of the MDS]
+mgmt_user=[Check Point admin username]
+mgmt_password=[Check Point admin password]
 ```
 
 Usage
