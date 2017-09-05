@@ -12,7 +12,7 @@ Or by clicking the Download ZIP button.
 4. In your `/etc/ansible/ansible.cfg` file, there is a `library` line, uncomment it and set it to be whatever you want, this will be your library folder for modules.
 5. Move the `check_point_mgmt` folder to your library folder.
 6. Move the `cp_mgmt_api_python_sdk` directory from the `check_point_mgmt` directory, into:  
-```/usr/lib/python2.7/site-packages```
+```/usr/lib/python2.7/site-packages```  
 7. Edit `/etc/ansible/hosts` so that it would contain a section similar to this one:  
 
 ```sh
