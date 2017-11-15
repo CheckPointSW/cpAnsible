@@ -130,27 +130,25 @@ def main():
         parameters = json.loads(parameters.replace("'", '"'))
     if command == "login":
         # Login parameters:
-        username = parameters["user"] if "user" in parameters else (
-            parameters["username"] if "username" in parameters else None)
-        password = parameters["pass"] if "pass" in parameters else (
-            parameters["password"] if "password" in parameters else None)
-        management = parameters["management"] if "management" in parameters else "127.0.0.1"
-        port = parameters["port"] if "port" in parameters else 443
-        domain = parameters["domain"] if "domain" in parameters else None
+        username = parameters.get("user", parameters.get("username"))
+        password = parameters.get("pass", parameters.get("password"))
+        management = parameters.get("management", "127.0.0.1")
+        port = parameters.get("port", 443)
+        domain = parameters.get("domain")
         client_args = APIClientArgs(server=management, port=port)
-        client = APIClient(client_args)
-        # Validate fingerprint:
-        validate_fingerprint(client, fingerprint)
-        # Tries to login:
-        client.login(username=username, password=password, domain=domain)
-        # Building a session data object
-        session_data = {
-            "url": management + ":" + str(port),
-            "domain": domain,
-            "sid": client.sid,
-            "fingerprint": client.fingerprint
-        }
-        resp = session_data
+        with APIClient(client_args) as client:
+            # Validate fingerprint:
+            validate_fingerprint(client, fingerprint)
+            # Tries to login:
+            client.login(username=username, password=password, domain=domain)
+            # Building a session data object
+            session_data = {
+                "url": management + ":" + str(port),
+                "domain": domain,
+                "sid": client.sid,
+                "fingerprint": client.fingerprint
+            }
+            resp = session_data
     else:
         # Parsing the session-data argument:
         try:
