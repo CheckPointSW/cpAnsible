@@ -33,7 +33,7 @@
     check_point_mgmt:                       # This will actually 'discard' when
                                             # check mode is enabled (ansible-playbook -C)
                                             # unless you add 'always_run: yes' to the task.
-      sesscommand: publish
+      command: publish
       session-data: "{{login_response}}"
   - name: logout
     check_point_mgmt:
