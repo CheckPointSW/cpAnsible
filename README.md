@@ -8,8 +8,8 @@ git clone --recursive https://github.com/CheckPoint-APIs-Team/cpAnsible
 ```
 Or by clicking the Download ZIP button.  
 2. [Install Ansible.](http://docs.ansible.com/ansible/intro_installation.html)  
-3. [Install a Python interpreter with version >= 2.7.9, but not Python 3 or above.](https://www.python.org/downloads/)  
-4. In your `/etc/ansible/ansible.cfg` file, there is a `library` line, uncomment it and set it to be whatever you want, this will be your library folder for modules.  
+3. [Install a Python interpreter with version >= 2.7.9, but not Python 3 or above.](https://www.python.org/downloads/)
+4. In your `/etc/ansible/ansible.cfg` file, there is a `library` line, uncomment it and set it to be whatever you want, this will be your library folder for modules.
 5. Move the `check_point_mgmt` folder to your library folder.  
 6. Move the `cp_mgmt_api_python_sdk` directory from the `check_point_mgmt` directory, into `/usr/lib/python2.7/site-packages`  
 7. Edit `/etc/ansible/hosts` so that it would contain a section similar to this one:  
@@ -20,7 +20,7 @@ Or by clicking the Download ZIP button.
 [localhost:vars]
 ansible_user=[a username with SSH access to the ansible server, not the Check Point server]
 ansible_ssh_pass=[password]
-ansible_python_interpreter=[path to the Python installation on the Ansible server]
+ansible_python_interpreter=[path to the Python installation (>=2.7.9 and < 3.0) on the Ansible server]
 # Optional (variables detailing the Check Point's management server access):
 mgmt_server=[management server's IP address. In case of a multi-domain setup, provide the IP address of the MDS]
 mgmt_user=[Check Point admin username]
