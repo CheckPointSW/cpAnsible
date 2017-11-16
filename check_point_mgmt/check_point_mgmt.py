@@ -91,8 +91,7 @@ EXAMPLES = """
 module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
 
 response = {}
-can_publish = True
-was_published = False
+was_changed = False
 
 # Commands that are unable to be run in check mode.
 # The module will stop and tell you to add an "always_run: yes" when running in check mode
@@ -119,13 +118,12 @@ def validate_fingerprint(client, local_fingerprint):
 
 
 def main():
-    global can_publish
-    global was_published
+    global was_changed
     # Initializing parameters to variables:
     command = module.params["command"]
-    parameters = module.params["parameters"] if "parameters" in module.params else None
-    session_data = module.params["session-data"] if "session-data" in module.params else None
-    fingerprint = module.params["fingerprint"] if "fingerprint" in module.params else None
+    parameters = module.params.get("parameters")
+    session_data = module.params.get("session-data")
+    fingerprint = module.params.get("fingerprint")
     if parameters:
         parameters = json.loads(parameters.replace("'", '"'))
     if command == "login":
@@ -136,19 +134,19 @@ def main():
         port = parameters.get("port", 443)
         domain = parameters.get("domain")
         client_args = APIClientArgs(server=management, port=port)
-        with APIClient(client_args) as client:
-            # Validate fingerprint:
-            validate_fingerprint(client, fingerprint)
-            # Tries to login:
-            client.login(username=username, password=password, domain=domain)
-            # Building a session data object
-            session_data = {
-                "url": management + ":" + str(port),
-                "domain": domain,
-                "sid": client.sid,
-                "fingerprint": client.fingerprint
-            }
-            resp = session_data
+        client = APIClient(client_args)
+        # Validate fingerprint:
+        validate_fingerprint(client, fingerprint)
+        # Tries to login:
+        client.login(username=username, password=password, domain=domain)
+        # Building a session data object
+        session_data = {
+            "url": management + ":" + str(port),
+            "domain": domain,
+            "sid": client.sid,
+            "fingerprint": client.fingerprint
+        }
+        resp = session_data
     else:
         # Parsing the session-data argument:
         try:
@@ -178,18 +176,24 @@ def main():
                    command == "publish" else "and we are skipping this command."),
                   client=client if command == "publish" else None, discard=True, logout=False, exit=True, fail=False)
 
+        if command == "install-policy" and module.check_mode:
+            command = "verify-policy"
+            parameters = {"policy-package": parameters["policy-package"]}
+
         # Run the command:
         res = client.api_call(command=command, payload=parameters)
 
+        if command.split("-")[0] in ["add", "delete", "set"] and res.success and not module.check_mode:
+            was_changed = True
+
         if not res.success:
-            error("Command '" + command + " " + str(
-                parameters) + "' failed{}. All changes are discarded and the session is invalidated.".format(
-                " with error message: " + str(res.error_message) if hasattr(res, "error_message") else ""),
+            error("Command '{} {}' failed{}. All changes are discarded and the session is invalidated."
+                  .format(command, parameters,
+                          " with error message: " + str(res.error_message) if hasattr(res, "error_message") else ""),
                   client=client)
-            can_publish = False
 
         resp = res.data
-    module.exit_json(response=resp, changed=was_published)
+    module.exit_json(response=resp, changed=was_changed)
 
 
 def is_int(_str):
@@ -210,7 +214,7 @@ def error(message, exit=True, fail=True, error_code=1, client=None, discard=True
             client.api_call(command="logout")
     if exit:
         if fail:
-            module.fail_json(changed=was_published, failed=True, msg=message)
+            module.fail_json(changed=was_changed, failed=True, msg=message)
         else:
             module.exit_json(response=message, changed=False)
         sys.exit(error_code)
