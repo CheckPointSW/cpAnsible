@@ -6,7 +6,7 @@ Installation instructions
 ```git
 git clone --recursive https://github.com/CheckPoint-APIs-Team/cpAnsible
 ```
-Or by clicking the Download ZIP button. In this case, the "cp_mgmt_api_python_sdk" folder will be created empty and you will need to manually download and copy the [Check Point API Python SDK](https://github.com/CheckPoint-APIs-Team/cpapi-python-sdk) content into this folder. 
+Or by clicking the Download ZIP button. In this case, the "cp_mgmt_api_python_sdk" folder will be created empty and you will need to manually download and copy the [Check Point API Python SDK](https://github.com/CheckPoint-APIs-Team/cpapi-python-sdk) content into this folder.  
 2. [Install Ansible.](http://docs.ansible.com/ansible/intro_installation.html)  
 3. [Install a Python interpreter with version >= 2.7.9, but not Python 3 or above.](https://www.python.org/downloads/)
 4. In your `/etc/ansible/ansible.cfg` file, there is a `library` line, uncomment it and set it to be whatever you want, this will be your library folder for modules.
