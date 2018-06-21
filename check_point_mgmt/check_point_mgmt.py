@@ -133,12 +133,14 @@ def main():
         management = parameters.get("management", "127.0.0.1")
         port = parameters.get("port", 443)
         domain = parameters.get("domain")
+        session_timeout = parameters.get("session-timeout", 600)
+        payload = {"session-timeout": session_timeout}
         client_args = APIClientArgs(server=management, port=port)
         client = APIClient(client_args)
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
         # Tries to login:
-        client.login(username=username, password=password, domain=domain)
+        client.login(username=username, password=password, domain=domain, payload=payload)
         # Building a session data object
         session_data = {
             "url": management + ":" + str(port),
