@@ -50,7 +50,7 @@ Description
 This Ansible module provides control over a Check Point management server using
 Check Point's web-services APIs.
 The web-services API reference can be found here:
-https:////sc1.checkpoint.com/documents/latest/APIs/index.html#ws~v1.2%20.
+https://sc1.checkpoint.com/documents/latest/APIs/index.html#ws~v1.2%20.
 
 A typical ansible command in a playbook should look like this:
   ```yaml
