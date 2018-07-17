@@ -164,7 +164,7 @@ def main():
         domain = session_data["domain"]
         management = session_data["url"].split('//')[1].split('/')[0].split(':')[0] if '//' in session_data["url"] else \
             session_data["url"].split('/')[0].split(':')[0]
-        if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('/')[0].split(':')[1]) :
+        if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('//')[1].split('/')[0].split(':')[1]) :
             port = int(session_data["url"].split('//')[1].split('/')[0].split(':')[1])
         elif len(session_data["url"].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('/')[0].split(':')[1]) :
             port = int(session_data["url"].split('/')[0].split(':')[1])
