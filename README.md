@@ -50,7 +50,7 @@ Description
 This Ansible module provides control over a Check Point management server using
 Check Point's web-services APIs.
 The web-services API reference can be found here:
-https://community.checkpoint.com (under "Developer Network > API Reference > Web Services").
+https:////sc1.checkpoint.com/documents/latest/APIs/index.html#ws~v1.2%20.
 
 A typical ansible command in a playbook should look like this:
   ```yaml
@@ -103,7 +103,7 @@ A typical ansible command in a playbook should look like this:
   ```
 
 
-Every communication with the Check Point server must start with a "login" command.
+Every communication with the Check Point management server must start with a "login" command.
 The login command takes some parameters that are not listed in the API reference,
 The list of the parameters login takes can be seen in the [options](#options) section:
 ```
@@ -151,7 +151,7 @@ Before communicating with a Check Point management server for the first time
    1. Use console access, or some other means of trusted communication to 
       log into the Check Point server.
    2. On the Check Point server, run "api fingerprint".
-      a typical response, should look like this:
+      A typical response, should look like this:
       ```
       Fingerprint:
       SHA1: 7E:FF:DE:CE:C7:B9:D0:67:35:E4:C4:16:EC:7A:03:13:48:CD:CA:8D
