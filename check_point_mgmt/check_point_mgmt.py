@@ -125,6 +125,7 @@ def main():
     session_data = module.params.get("session-data")
     fingerprint = module.params.get("fingerprint")
     if parameters:
+	    parameters = parameters.replace("None", "null")
         parameters = json.loads(parameters.replace("'", '"'))
     if command == "login":
         # Login parameters:
