@@ -126,7 +126,14 @@ def main():
     fingerprint = module.params.get("fingerprint")
     if parameters:
         parameters = parameters.replace("None", "null")
-        parameters = json.loads(parameters.replace("'", '"'))
+        parameters = parameters.replace("'", '"')
+        # The following replace method must be the last replace option!!!
+        # This is intended for running run-script API command in CLISH mode, where the "'" character is required inside the script parameter.
+        # Example: "clish -c 'show core-dump status'"
+        # For such case, the YML must be in the following format: 'clish -c \"show core-dump status\"'
+        parameters = parameters.replace("\\\\\"", "'")
+        # Finally, parse to JSON
+        parameters = json.loads(parameters)
     if command == "login":
         # Login parameters:
         username = parameters.get("user", parameters.get("username"))
@@ -165,9 +172,9 @@ def main():
         domain = session_data["domain"]
         management = session_data["url"].split('//')[1].split('/')[0].split(':')[0] if '//' in session_data["url"] else \
             session_data["url"].split('/')[0].split(':')[0]
-        if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('//')[1].split('/')[0].split(':')[1]) :
+        if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('//')[1].split('/')[0].split(':')[1]):
             port = int(session_data["url"].split('//')[1].split('/')[0].split(':')[1])
-        elif len(session_data["url"].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('/')[0].split(':')[1]) :
+        elif len(session_data["url"].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('/')[0].split(':')[1]):
             port = int(session_data["url"].split('/')[0].split(':')[1])
         else:
             port = 443
