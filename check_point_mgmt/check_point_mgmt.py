@@ -5,7 +5,7 @@ import sys
 
 from ansible.module_utils.basic import AnsibleModule
 
-from cp_mgmt_api_python_sdk.lib import APIClient, APIClientArgs
+from cp_mgmt_api_python_sdk import APIClient, APIClientArgs
 
 # arguments for the module:
 fields = {
