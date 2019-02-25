@@ -124,6 +124,7 @@ def main():
     parameters = module.params.get("parameters")
     session_data = module.params.get("session-data")
     fingerprint = module.params.get("fingerprint")
+    api = "web_api"
     if parameters:
         parameters = parameters.replace("None", "null")
         parameters = parameters.replace("'", '"')
@@ -134,6 +135,9 @@ def main():
         parameters = parameters.replace("\\\\\"", "'")
         # Finally, parse to JSON
         parameters = json.loads(parameters)
+        if "api" in parameters:
+            api = parameters["api"]
+            parameters.pop("api")
     if command == "login":
         # Login parameters:
         username = parameters.get("user", parameters.get("username"))
@@ -142,8 +146,8 @@ def main():
         port = parameters.get("port", 443)
         domain = parameters.get("domain")
         session_timeout = parameters.get("session-timeout", 600)
-        payload = {"session-timeout": session_timeout}
-        client_args = APIClientArgs(server=management, port=port)
+        payload = {"session-timeout": session_timeout} if api == "web_api" else None
+        client_args = APIClientArgs(server=management, port=port, context=api)
         client = APIClient(client_args)
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
@@ -179,7 +183,7 @@ def main():
         else:
             port = 443
         fingerprint = session_data["fingerprint"]
-        client_args = APIClientArgs(server=management, port=port, sid=session_id)
+        client_args = APIClientArgs(server=management, port=port, sid=session_id, context=api)
         client = APIClient(client_args)
         client.domain = domain
         validate_fingerprint(client, fingerprint)
