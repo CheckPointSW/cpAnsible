@@ -1,16 +1,15 @@
 ---
-- hosts: GW1
-  connection: local
+- hosts: "localhost"
   tasks:
   - name: "login"
     check_point_mgmt:
       command: login
       parameters:
-        username: "{{mgmt_user}}"
-        password: "{{mgmt_password}}"
-        management: "{{inventory_hostname}}"
+        username: "{{gaia_user}}"
+        password: "{{gaia_password}}"
+        management: "{{gaia_server}}"
         context: "gaia_api"
-      fingerprint: "{{hostvars[inventory_hostname]['fingerprint']}}"
+      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
     register: login_response
 
   - name: "show vrrp summary"
