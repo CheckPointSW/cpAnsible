@@ -12,13 +12,6 @@
       fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
     register: login_response
 
-  - name: "show vrrp summary"
-    check_point_mgmt:
-      command: show-vrrp-summary
-      parameters:
-        context: "gaia_api"
-      session-data: "{{ login_response }}"
-
   - name: "set physical interface"
     check_point_mgmt:
       command: set-physical-interface
@@ -26,6 +19,15 @@
         name: "eth2"
         enabled: "true"
         context: "gaia_api"        
+      session-data: "{{ login_response }}"
+
+  - name: "show static route"
+    check_point_mgmt:
+      command: show-static-route
+      parameters:
+        address: "0.0.0.0"
+        mask-length: "24"
+        context: "gaia_api"
       session-data: "{{ login_response }}"
       
   - name: "show asset"
