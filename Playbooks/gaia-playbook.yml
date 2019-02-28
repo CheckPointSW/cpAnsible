@@ -21,12 +21,11 @@
         context: "gaia_api"        
       session-data: "{{ login_response }}"
 
-  - name: "show static route"
+  - name: "show remote syslog"
     check_point_mgmt:
-      command: show-static-route
+      command: show-remote-syslog
       parameters:
-        address: "0.0.0.0"
-        mask-length: "24"
+        server-ip: "192.168.1.2"
         context: "gaia_api"
       session-data: "{{ login_response }}"
       
