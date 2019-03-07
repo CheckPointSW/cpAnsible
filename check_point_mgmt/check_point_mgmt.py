@@ -19,6 +19,10 @@ fields = {
     },
     "fingerprint": {
         "type": "str"
+    },
+    "context": {
+        "type": "str",
+        "default": "web_api"
     }
 }
 
@@ -45,6 +49,10 @@ options:
     fingerprint:
         description:
           - Fingerprint to verify the server's fingerprint with.
+        required: false
+    context:
+        description:
+          - The context of using the api. Defaults to web_api.
         required: false
 """
 
@@ -124,7 +132,7 @@ def main():
     parameters = module.params.get("parameters")
     session_data = module.params.get("session-data")
     fingerprint = module.params.get("fingerprint")
-    context = "web_api"
+    context = module.params.get("context")
     if parameters:
         parameters = parameters.replace("None", "null")
         parameters = parameters.replace("'", '"')
@@ -135,8 +143,6 @@ def main():
         parameters = parameters.replace("\\\\\"", "'")
         # Finally, parse to JSON
         parameters = json.loads(parameters)
-        context = parameters.get("context", context)
-        parameters.pop("context", None)
     if command == "login":
         # Login parameters:
         username = parameters.get("user", parameters.get("username"))
@@ -151,7 +157,7 @@ def main():
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
         # Tries to login:
-        client.login(username=username, password=password, domain=domain, payload=payload)
+        res = client.login(username=username, password=password, domain=domain, payload=payload)
         # Building a session data object
         session_data = {
             "url": management + ":" + str(port),
