@@ -157,7 +157,7 @@ def main():
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
         # Tries to login:
-        res = client.login(username=username, password=password, domain=domain, payload=payload)
+        client.login(username=username, password=password, domain=domain, payload=payload)
         # Building a session data object
         session_data = {
             "url": management + ":" + str(port),
