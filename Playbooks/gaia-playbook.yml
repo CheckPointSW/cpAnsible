@@ -9,7 +9,7 @@
         password: "{{gaia_password}}"
         management: "{{gaia_server}}"
       context: "gaia_api"
-      fingerprint: "8438E4D59ECAA394D91A6A0CF341D7C01D2E9836"
+      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
     register: login_response
 
   - name: "set physical interface"
