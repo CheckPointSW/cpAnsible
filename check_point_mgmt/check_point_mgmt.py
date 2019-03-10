@@ -132,6 +132,8 @@ def main():
         # Example: "clish -c 'show core-dump status'"
         # For such case, the YML must be in the following format: 'clish -c \"show core-dump status\"'
         parameters = parameters.replace("\\\\\"", "'")
+        parameters = parameters.replace("True", "true")
+        parameters = parameters.replace("False", "false")
         # Finally, parse to JSON
         parameters = json.loads(parameters)
     if command == "login":
