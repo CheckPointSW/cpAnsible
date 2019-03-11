@@ -7,7 +7,7 @@
       parameters:
         username: "{{gaia_user}}"
         password: "{{gaia_password}}"
-        management: "{{gaia_server}}"
+        management: "{{server-management-ip}}"
       context: "gaia_api"
       fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
     register: login_response
