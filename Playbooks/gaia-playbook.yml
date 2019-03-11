@@ -1,0 +1,36 @@
+---
+- hosts: "localhost"
+  tasks:
+  - name: "login"
+    check_point_mgmt:
+      command: login
+      parameters:
+        username: "{{gaia_user}}"
+        password: "{{gaia_password}}"
+        management: "{{server_management_ip}}"
+      context: "gaia_api"
+      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
+    register: login_response
+
+  - name: "set physical interface"
+    check_point_mgmt:
+      command: set-physical-interface
+      parameters:
+        name: "eth2"
+        enabled: "true"
+      context: "gaia_api"
+      session-data: "{{ login_response }}"
+
+  - name: "show remote syslog"
+    check_point_mgmt:
+      command: show-remote-syslog
+      parameters:
+        server-ip: "192.168.1.2"
+      context: "gaia_api"
+      session-data: "{{ login_response }}"
+
+  - name: "show asset"
+    check_point_mgmt:
+      command: show-asset
+      context: "gaia_api"
+      session-data: "{{ login_response }}"

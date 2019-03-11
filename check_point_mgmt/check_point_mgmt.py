@@ -19,6 +19,10 @@ fields = {
     },
     "fingerprint": {
         "type": "str"
+    },
+    "context": {
+        "type": "str",
+        "default": "web_api"
     }
 }
 
@@ -45,6 +49,10 @@ options:
     fingerprint:
         description:
           - Fingerprint to verify the server's fingerprint with.
+        required: false
+    context:
+        description:
+          - The context of using the api. Defaults to web_api.
         required: false
 """
 
@@ -124,6 +132,7 @@ def main():
     parameters = module.params.get("parameters")
     session_data = module.params.get("session-data")
     fingerprint = module.params.get("fingerprint")
+    context = module.params.get("context")
     if parameters:
         parameters = parameters.replace("None", "null")
         parameters = parameters.replace("'", '"')
@@ -145,7 +154,7 @@ def main():
         domain = parameters.get("domain")
         session_timeout = parameters.get("session-timeout", 600)
         payload = {"session-timeout": session_timeout}
-        client_args = APIClientArgs(server=management, port=port)
+        client_args = APIClientArgs(server=management, port=port, context=context)
         client = APIClient(client_args)
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
@@ -181,7 +190,7 @@ def main():
         else:
             port = 443
         fingerprint = session_data["fingerprint"]
-        client_args = APIClientArgs(server=management, port=port, sid=session_id)
+        client_args = APIClientArgs(server=management, port=port, sid=session_id, context=context)
         client = APIClient(client_args)
         client.domain = domain
         validate_fingerprint(client, fingerprint)
