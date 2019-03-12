@@ -56,7 +56,7 @@ options:
         required: false
     context:
         description:
-          - The context of using the api. Defaults to web_api.
+          - The context of using the api. Defaults to web_api. Can be set on login command.
         required: false
     api_version:
         description:
