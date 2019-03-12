@@ -9,7 +9,8 @@
         password: "{{gaia_password}}"
         management: "{{server_management_ip}}"
       context: "gaia_api"
-      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
+      api_version: 1.1
+      fingerprint: "8438E4D59ECAA394D91A6A0CF341D7C01D2E9836"
     register: login_response
 
   - name: "set physical interface"
@@ -18,19 +19,14 @@
       parameters:
         name: "eth2"
         enabled: "true"
-      context: "gaia_api"
       session-data: "{{ login_response }}"
 
-  - name: "show remote syslog"
+  - name: "show syslog"
     check_point_mgmt:
-      command: show-remote-syslog
-      parameters:
-        server-ip: "192.168.1.2"
-      context: "gaia_api"
+      command: show-syslog
       session-data: "{{ login_response }}"
 
   - name: "show asset"
     check_point_mgmt:
       command: show-asset
-      context: "gaia_api"
       session-data: "{{ login_response }}"
