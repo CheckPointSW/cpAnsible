@@ -56,11 +56,11 @@ options:
         required: false
     context:
         description:
-          - The context of using the api. Defaults to web_api. Can be set on login command.
+          - The context of using the api. Defaults to web_api. Editable on login command.
         required: false
     api_version:
         description:
-          - The version of the api.
+          - The version of the api. Can be set on login command for all the session, but can be overwritten per api command. 
         required: false
 """
 
@@ -191,7 +191,8 @@ def main():
         session_id = session_data["sid"]
         domain = session_data["domain"]
         context = session_data["context"]
-        api_version = session_data["api_version"]
+        if api_version is None:
+            api_version = session_data["api_version"]
         management = session_data["url"].split('//')[1].split('/')[0].split(':')[0] if '//' in session_data["url"] else \
             session_data["url"].split('/')[0].split(':')[0]
         if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('//')[1].split('/')[0].split(':')[1]):

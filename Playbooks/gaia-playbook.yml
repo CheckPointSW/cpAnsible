@@ -10,7 +10,7 @@
         management: "{{server_management_ip}}"
       context: "gaia_api"
       api_version: 1.1
-      fingerprint: "8438E4D59ECAA394D91A6A0CF341D7C01D2E9836"
+      fingerprint: "C3:B4:54:8D:0E:C0:7E:D4:31:64:94:13:F5:14:CD:93:68:6A:4F:4D"
     register: login_response
 
   - name: "set physical interface"
@@ -24,6 +24,7 @@
   - name: "show syslog"
     check_point_mgmt:
       command: show-syslog
+      api_version: 1                          #This is an example of overwriting the version determined on login
       session-data: "{{ login_response }}"
 
   - name: "show asset"
