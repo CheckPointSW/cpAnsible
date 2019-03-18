@@ -23,6 +23,10 @@ fields = {
     "context": {
         "type": "str",
         "default": "web_api"
+    },
+    "api_version": {
+        "type": "str",
+        "default": None
     }
 }
 
@@ -52,7 +56,11 @@ options:
         required: false
     context:
         description:
-          - The context of using the api. Defaults to web_api.
+          - The context of using the api. Defaults to web_api. Editable on login command.
+        required: false
+    api_version:
+        description:
+          - The version of the api. Can be set on login command for all the session, but can be overwritten per api command. 
         required: false
 """
 
@@ -133,6 +141,7 @@ def main():
     session_data = module.params.get("session-data")
     fingerprint = module.params.get("fingerprint")
     context = module.params.get("context")
+    api_version = module.params.get("api_version")
     if parameters:
         parameters = parameters.replace("None", "null")
         parameters = parameters.replace("'", '"')
@@ -154,7 +163,7 @@ def main():
         domain = parameters.get("domain")
         session_timeout = parameters.get("session-timeout", 600)
         payload = {"session-timeout": session_timeout}
-        client_args = APIClientArgs(server=management, port=port, context=context)
+        client_args = APIClientArgs(server=management, port=port, context=context, api_version=api_version)
         client = APIClient(client_args)
         # Validate fingerprint:
         validate_fingerprint(client, fingerprint)
@@ -165,7 +174,9 @@ def main():
             "url": management + ":" + str(port),
             "domain": domain,
             "sid": client.sid,
-            "fingerprint": client.fingerprint
+            "fingerprint": client.fingerprint,
+            "context": client.context,
+            "api_version": client.api_version
         }
         resp = session_data
     else:
@@ -181,6 +192,9 @@ def main():
 
         session_id = session_data["sid"]
         domain = session_data["domain"]
+        context = session_data["context"]
+        if api_version is None:
+            api_version = session_data["api_version"]
         management = session_data["url"].split('//')[1].split('/')[0].split(':')[0] if '//' in session_data["url"] else \
             session_data["url"].split('/')[0].split(':')[0]
         if '//' in session_data["url"] and len(session_data["url"].split('//')[1].split('/')[0].split(':')) > 1 and is_int(session_data["url"].split('//')[1].split('/')[0].split(':')[1]):
@@ -190,7 +204,7 @@ def main():
         else:
             port = 443
         fingerprint = session_data["fingerprint"]
-        client_args = APIClientArgs(server=management, port=port, sid=session_id, context=context)
+        client_args = APIClientArgs(server=management, port=port, sid=session_id, context=context, api_version=api_version)
         client = APIClient(client_args)
         client.domain = domain
         validate_fingerprint(client, fingerprint)
