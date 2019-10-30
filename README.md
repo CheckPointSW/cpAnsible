@@ -1,5 +1,12 @@
 ﻿# Ansible Module - check_point_mgmt by Check Point®
 
+Note
+-----
+This repository is being deprecated.  
+Starting with Ansible 2.9 release, users are encouraged to use the official Check Point integration.  
+For more details, see:  
+https://www.ansible.com/cybersecurity-automation-and-prevention-with-check-point-and-ansible
+
 Installation instructions
 -------------------------
 1. Clone the repository with this command:
