@@ -6,9 +6,10 @@ This repository is being deprecated.
 Starting with Ansible 2.9 release, users are encouraged to use the official Check Point integration.  
 For more details, see:  
 https://www.ansible.com/cybersecurity-automation-and-prevention-with-check-point-and-ansible<br>
-There are two ways to use the official Check Point integration:
-1. The formal version of Ansible – 2.9 (less recommended)
-2. `collection` which is a new feature of Ansible in Ansible-Galaxy (the recommend option)  - https://galaxy.ansible.com/check_point/mgmt
+There are two ways to obtain the official Check Point integration:
+1. Download the official Check Point Management API modules collection from the Ansible Galaxy:      https://galaxy.ansible.com/check_point/mgmt (recommended)
+2. Use the Check Point Management API modules included in the core of Ansible 2.9.
+
 
 
 Installation instructions
